@@ -1,63 +1,33 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web.
+# Sistema de Gestión de Ventas Multiplataforma
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+## Descripción del Proyecto
+Este proyecto es un sistema de gestión diseñado para administrar un catálogo de productos y una cartera de clientes. Fue desarrollado utilizando Kotlin Multiplatform (KMP) y Compose Multiplatform, lo que permite que el mismo código fuente de la lógica y la interfaz visual funcione de manera idéntica tanto en dispositivos móviles (Android) como en navegadores web.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+## Configuración de la Dirección IP
+Para que la aplicación se conecte correctamente a los datos, es estrictamente necesario configurar la dirección IP del servidor o de la red local. 
 
-### Build and Run Android Application
+El archivo que debe modificar se encuentra en la siguiente ruta:
+`composeApp/src/commonMain/kotlin/edu/itvo/kmp1/di/AppComponent.kt`
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+Dentro de ese archivo, busque la variable `baseUrl` y reemplace la IP y el puerto por los que correspondan a su entorno de pruebas o producción:
+`private val baseUrl = "http://192.168.1.206:3000"`
 
-### Build and Run Web Application
+## Sincronización del Proyecto
+Antes de ejecutar la aplicación por primera vez, es obligatorio sincronizar los archivos de configuración para evitar errores de memoria caché. 
+1. Vaya al menú superior en Android Studio.
+2. Seleccione la pestaña "File".
+3. Haga clic en "Sync Project with Gradle Files" (o presione el icono de sincronización de Gradle).
 
-To build and run the development version of the web app, use the run configuration from the run widget
-in your IDE's toolbar or run it directly from the terminal:
-- for the Wasm target (faster, modern browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-- for the JS target (slower, supports older browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:jsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
-    ```
+## Instrucciones de Ejecución 
 
-### Build and Run iOS Application
+Todo el proyecto se puede ejecutar directamente desde la interfaz gráfica de Android Studio, utilizando el menú desplegable de configuraciones ubicado en la barra superior, junto al botón de reproducción (Run).
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+### Ejecución en Android:
+1. Abra el Device Manager e inicie su emulador.
+2. En el menú de configuraciones de ejecución, seleccione el módulo principal de la aplicación (generalmente "composeApp").
+3. Presione el botón verde de "Run".
 
----
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
-
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+### Ejecución en Web:
+1. En el mismo menú de configuraciones de ejecución, cambie el módulo seleccionado a la tarea web preconfigurada (por ejemplo, "jsBrowserDevelopmentRun").
+2. Presione el botón verde de "Run".
+3. Android Studio compilará el código y abrirá la aplicación automáticamente en su navegador web predeterminado.
