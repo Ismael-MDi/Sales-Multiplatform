@@ -1,0 +1,58 @@
+package edu.itvo.kmp1.aspect.product.data.repository
+
+import edu.itvo.kmp1.aspect.product.data.datasource.remote.ProductRemoteDataSource
+import edu.itvo.kmp1.aspect.product.data.mapper.toDomain
+import edu.itvo.kmp1.aspect.product.data.mapper.toDto
+import edu.itvo.kmp1.aspect.product.domain.model.Product
+import edu.itvo.kmp1.aspect.product.domain.repository.ProductRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
+class ProductRepositoryImpl(
+    private val remote: ProductRemoteDataSource
+) : ProductRepository {
+
+    override fun observeAll(): Flow<List<Product>> = flow {
+
+        val products = remote.getProducts()
+
+        emit(
+            products.map {
+                it.toDomain()
+            }
+        )
+    }
+
+    override suspend fun findById(
+        id: String
+    ): Product? {
+
+        return observeAll()
+            .let { flow ->
+
+                var result: Product? = null
+
+                flow.collect { products ->
+                    result = products.find {
+                        it.code == id
+                    }
+                }
+
+                result
+            }
+    }
+
+    override suspend fun save(
+        item: Product
+    ) {
+        remote.saveProduct(
+            item.toDto()
+        )
+    }
+
+    override suspend fun deleteById(
+        id: String
+    ) {
+        remote.deleteProduct(id)
+    }
+}
